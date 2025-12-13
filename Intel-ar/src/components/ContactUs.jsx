@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
+import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 // eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
@@ -8,13 +8,12 @@ import { CheckCircle, Loader2 } from 'lucide-react';
 export default function ContactUs() {
   const { t } = useLanguage();
 
-  // 1. STATE: Added 'profile' to state
   const [formData, setFormData] = useState({
     company: '',
     name: '',
     email: '',
     phone: '',
-    profile: '', // New field for Expert Selection
+    profile: '',
     message: ''
   });
 
@@ -29,10 +28,11 @@ export default function ContactUs() {
     setStatus('submitting');
 
     try {
-      // Send data to Python Backend
-        const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000';
-
-        const response = await fetch(`${API_URL}/api/contact`, {
+      // --- FIX IS HERE: Dynamic URL ---
+      // Uses the Vercel Environment Variable OR Localhost fallback
+      const API_BASE = import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000';
+      
+      const response = await fetch(`${API_BASE}/api/contact`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ export default function ContactUs() {
       }
     } catch (error) {
       console.error("Network Error:", error);
-      alert("Erreur de connexion au serveur backend.");
+      alert("Error connecting to the backend server. Please try again.");
       setStatus('idle');
     }
   };
@@ -101,7 +101,6 @@ export default function ContactUs() {
                 
                 <Form onSubmit={handleSubmit}>
                   <Row className="g-4">
-                    {/* Company */}
                     <Col md={6}>
                       <Form.Group>
                         <Form.Label className="fw-bold text-dark text-sm">{t.contact.form.company}</Form.Label>
@@ -109,7 +108,6 @@ export default function ContactUs() {
                       </Form.Group>
                     </Col>
                     
-                    {/* Name */}
                     <Col md={6}>
                       <Form.Group>
                         <Form.Label className="fw-bold text-dark text-sm">{t.contact.form.name}</Form.Label>
@@ -117,7 +115,6 @@ export default function ContactUs() {
                       </Form.Group>
                     </Col>
                     
-                    {/* Email */}
                     <Col md={6}>
                       <Form.Group>
                         <Form.Label className="fw-bold text-dark text-sm">{t.contact.form.email}</Form.Label>
@@ -125,7 +122,6 @@ export default function ContactUs() {
                       </Form.Group>
                     </Col>
                     
-                    {/* Phone */}
                     <Col md={6}>
                       <Form.Group>
                         <Form.Label className="fw-bold text-dark text-sm">{t.contact.form.phone}</Form.Label>
@@ -133,7 +129,6 @@ export default function ContactUs() {
                       </Form.Group>
                     </Col>
 
-                    {/* --- NEW FIELD: PROFILE SELECTOR --- */}
                     <Col xs={12}>
                       <Form.Group>
                         <Form.Label className="fw-bold text-dark text-sm">
@@ -146,7 +141,6 @@ export default function ContactUs() {
                           className="p-3 bg-light border-0 rounded-3"
                         >
                           <option value="">Sélectionnez un profil...</option>
-                          {/* Dynamically list experts from your Data file */}
                           {t.experts.list.map((expert, index) => (
                             <option key={index} value={expert}>{expert}</option>
                           ))}
@@ -154,9 +148,7 @@ export default function ContactUs() {
                         </Form.Select>
                       </Form.Group>
                     </Col>
-                    {/* ----------------------------------- */}
 
-                    {/* Message */}
                     <Col xs={12}>
                       <Form.Group>
                         <Form.Label className="fw-bold text-dark text-sm">{t.contact.form.message}</Form.Label>

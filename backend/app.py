@@ -7,18 +7,15 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": ["http://localhost:5173", "https://intel-ar-website.vercel.app"]}})
 
-# ==============================================================================
-# ⚙️ CONFIGURATION (YOU MUST CHANGE THESE 2 LINES)
-# ==============================================================================
-# 1. THE COURIER EMAIL (The Gmail account you just created to send messages)
+
 SENDER_EMAIL = "intelwebsitebot@gmail.com" 
 
-# 2. THE APP PASSWORD for the courier email (16 characters)
+
 SENDER_PASSWORD = "lqfk bcop xnlh yqew" 
 
-# 3. THE COMPANY EMAIL (Where the message arrives)
+
 RECIPIENT_EMAIL = "infos@intel-ar.ca" 
-# ==============================================================================
+
 
 @app.route('/api/contact', methods=['POST'])
 def contact():
@@ -62,8 +59,7 @@ def contact():
         msg['To'] = RECIPIENT_EMAIL
         msg['Subject'] = subject
         
-        # *** THE MAGIC TRICK ***
-        # This makes the "Reply" button go to the USER, not the courier.
+
         msg.add_header('Reply-To', user_email) 
 
         msg.attach(MIMEText(body, 'plain'))
