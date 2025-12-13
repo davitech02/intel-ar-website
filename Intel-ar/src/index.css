@@ -1,0 +1,123 @@
+/* 1. IMPORT INTER FONT */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  /* BACKGROUNDS */
+  --bg-white: #ffffff;
+  --bg-light: #f0fdfa; /* Very subtle teal tint for light sections */
+  
+  /* TEXT */
+  --text-dark: #0f172a; 
+  --text-body: #475569; 
+  
+  /* --- BRAND COLORS (FROM LOGO) --- */
+  --primary: #00A3FF;   /* Bright Sky Blue */
+  --accent: #00D4BD;    /* Vibrant Teal */
+  --primary-dark: #0081cc; /* Darker blue for hover states */
+}
+
+body {
+  background-color: var(--bg-white) !important;
+  color: var(--text-body) !important;
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  line-height: 1.7;
+}
+
+/* TYPOGRAPHY */
+h1, h2, h3, h4, h5 {
+  color: var(--text-dark);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* --- GRADIENT TEXT (Matches Logo Swoosh) --- */
+.text-gradient-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+
+/* NAVBAR */
+.navbar-custom {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid #ccfbf1; /* Subtle teal border */
+  box-shadow: 0 4px 20px -5px rgba(0, 212, 189, 0.1); /* Teal glow */
+}
+
+.navbar-brand, .nav-link { color: var(--text-dark) !important; font-weight: 600; }
+.nav-link:hover { color: var(--primary) !important; }
+
+/* --- GRADIENT BUTTONS (Matches Logo) --- */
+.btn-primary-custom {
+  background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 50px; /* Fully rounded like the logo circles */
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 163, 255, 0.3); /* Blue glow */
+}
+
+.btn-primary-custom:hover {
+  background: linear-gradient(90deg, var(--accent) 0%, var(--primary) 100%); /* Reverse gradient on hover */
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 212, 189, 0.4); /* Teal glow */
+}
+
+/* --- ROUNDED CARD UTILITIES --- */
+.rounded-card { 
+  border-radius: 24px !important; 
+}
+
+.shadow-card { 
+  box-shadow: 0 10px 40px -10px rgba(0, 163, 255, 0.08) !important; 
+}
+
+/* LAYOUT */
+section:first-of-type .container { padding-top: 140px !important; }
+@media (max-width: 991px) {
+  section:first-of-type .container {
+    padding-top: 100px !important;
+    padding-bottom: 50px !important;
+  }
+}
+
+/* --- GLOBAL SECTION SPACING --- */
+section {
+  padding-top: 120px !important;
+  padding-bottom: 120px !important;
+}
+
+section:first-of-type {
+  padding-bottom: 120px !important;
+}
+
+/* --- OVERRIDE BOOTSTRAP PRIMARY COLORS --- */
+.text-primary {
+  color: var(--primary) !important;
+}
+.bg-primary {
+  background-color: var(--primary) !important;
+}
+
+/* FAQ / ACCORDION CUSTOM COLORS */
+.modern-accordion .accordion-button {
+  background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%) !important;
+  color: white !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 163, 255, 0.4) !important; 
+}
+
+.modern-accordion .accordion-button:not(.collapsed) {
+  background: linear-gradient(90deg, #008CDB 0%, #00B5A1 100%) !important; /* Darker gradient when open */
+}
+
+.modern-accordion .accordion-button::after {
+  filter: brightness(0) invert(1); /* Make arrow white */
+}
