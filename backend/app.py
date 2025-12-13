@@ -5,7 +5,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/api/*": {"origins": ["http://localhost:5173", "https://intel-ar-website.vercel.app"]}})
 
 # ==============================================================================
 # ⚙️ CONFIGURATION (YOU MUST CHANGE THESE 2 LINES)
