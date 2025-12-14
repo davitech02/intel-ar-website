@@ -30,9 +30,9 @@ export default function ContactUs() {
     try {
       // --- FIX IS HERE: Dynamic URL ---
       // Uses the Vercel Environment Variable OR Localhost fallback
-      const API_BASE = import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000';
+      const API_BASE = "https://intel-ar-website-backend.onrender.com";
       
-      const response = await fetch(`${API_BASE}/api/contact`, {
+       const response = await fetch(`${API_BASE}/api/contact`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
