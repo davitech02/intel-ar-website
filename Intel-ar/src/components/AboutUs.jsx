@@ -36,7 +36,6 @@ export default function AboutUs() {
                 </span>
                 
                 <h2 className="text-dark mb-4 display-6 fw-bold">
-                  {/* --- FIX IS HERE: Uses translation variable now --- */}
                   {t.about.purpose_heading}
                 </h2>
 
@@ -129,19 +128,28 @@ export default function AboutUs() {
       </section>
 
       {/* =============================================
-          SECTION 3: TALENT
+          SECTION 3: TALENT (UPDATED DESIGN)
           ============================================= */}
       <section className="py-32 bg-white">
         <Container>
+          {/* New Design: Dark Blue Card with Subtle Gradient instead of Circle */}
           <div className="bg-primary text-white p-5 rounded-card shadow-card position-relative overflow-hidden">
-            <div className="position-absolute top-0 end-0 bg-white opacity-10 rounded-circle" style={{ width: '300px', height: '300px', transform: 'translate(30%, -30%)' }}></div>
+            
+            {/* New Design Element: A soft glow on the right, safely behind text */}
+            <div 
+              className="position-absolute top-0 end-0 h-100 w-50" 
+              style={{
+                background: 'linear-gradient(to left, rgba(255,255,255,0.1), transparent)',
+                pointerEvents: 'none'
+              }}
+            ></div>
             
             <Row className="align-items-center position-relative z-10">
               <Col lg={8} className="mb-4 mb-lg-0">
                 <h3 className="fw-bold text-white mb-3">
                   {t.about.talent_title}
                 </h3>
-                <p className="text-blue-100 fs-5 mb-0" style={{ fontWeight: 300 }}>
+                <p className="text-white opacity-90 fs-5 mb-0" style={{ fontWeight: 300, lineHeight: '1.6' }}>
                   {t.about.talent_desc}
                 </p>
               </Col>
