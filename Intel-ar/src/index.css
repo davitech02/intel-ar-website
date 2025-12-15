@@ -134,3 +134,14 @@ section:first-of-type .container { padding-top: 140px !important; }
 .modern-accordion .accordion-button::after {
   filter: brightness(0) invert(1); /* Make arrow white */
 }
+
+/* --- GLOBAL SECTION SPACING --- */
+section {
+  padding-top: 40px !important;    /* Increased from 120px */
+  padding-bottom: 40px !important; /* Increased from 120px */
+}
+
+/* Keep the Hero exception as is */
+section:first-of-type {
+  padding-bottom: 100px !important;
+}
