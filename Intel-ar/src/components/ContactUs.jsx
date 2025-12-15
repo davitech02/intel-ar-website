@@ -1,12 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; // REMOVED useEffect
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
-// eslint-disable-next-line no-unused-vars
-import { motion } from 'framer-motion';
+// REMOVED motion import
 import { useLanguage } from '../context/LanguageContext';
 import { CheckCircle, Loader2 } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 
 export default function ContactUs() {
   const { t } = useLanguage();
+  
+  const location = useLocation();
+  const mode = location.state?.mode || 'default'; 
+
+  const hideProfileSelector = mode === 'consultation';
+  const hideMessageField = mode === 'expert';
 
   const [formData, setFormData] = useState({
     company: '',
@@ -27,17 +33,21 @@ export default function ContactUs() {
     e.preventDefault();
     setStatus('submitting');
 
+    let submissionData = { ...formData };
+
+    if (hideMessageField) {
+      submissionData.message = `[EXPERT REQUEST] User is interested in profile: ${formData.profile || 'General Expert'}`;
+    }
+
     try {
-      // --- FIX IS HERE: Dynamic URL ---
-      // Uses the Vercel Environment Variable OR Localhost fallback
-      const API_BASE = "https://intel-ar-website-backend.onrender.com";
+      const API_BASE = import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000';
       
-       const response = await fetch(`${API_BASE}/api/contact`, {
+      const response = await fetch(`${API_BASE}/api/contact`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(submissionData),
       });
 
       const result = await response.json();
@@ -61,18 +71,15 @@ export default function ContactUs() {
       <Container>
         <Row className="justify-content-center">
           <Col lg={8} className="text-center mb-16">
-             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
+             {/* CHANGED motion.div TO div */}
+             <div>
               <h2 className="display-6 fw-bold text-dark mb-3">
                 {t.contact.title}
               </h2>
               <p className="text-secondary fs-5">
                 {t.contact.subtitle}
               </p>
-            </motion.div>
+            </div>
           </Col>
         </Row>
 
@@ -81,11 +88,7 @@ export default function ContactUs() {
             <div className="bg-white p-5 rounded-card shadow-card border border-light">
               
               {status === 'success' ? (
-                <motion.div 
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="text-center py-5"
-                >
+                <div className="text-center py-5">
                   <div className="mb-4 text-success d-inline-block p-3 rounded-circle bg-green-50">
                     <CheckCircle size={60} />
                   </div>
@@ -96,7 +99,7 @@ export default function ContactUs() {
                   <Button variant="outline-primary" onClick={() => setStatus('idle')}>
                     Envoyer un autre message
                   </Button>
-                </motion.div>
+                </div>
               ) : (
                 
                 <Form onSubmit={handleSubmit}>
@@ -129,32 +132,46 @@ export default function ContactUs() {
                       </Form.Group>
                     </Col>
 
-                    <Col xs={12}>
-                      <Form.Group>
-                        <Form.Label className="fw-bold text-dark text-sm">
-                          {t.experts.title} (Optionnel)
-                        </Form.Label>
-                        <Form.Select 
-                          name="profile" 
-                          value={formData.profile} 
-                          onChange={handleChange} 
-                          className="p-3 bg-light border-0 rounded-3"
-                        >
-                          <option value="">Sélectionnez un profil...</option>
-                          {t.experts.list.map((expert, index) => (
-                            <option key={index} value={expert}>{expert}</option>
-                          ))}
-                          <option value="Autre">Autre / Je ne sais pas encore</option>
-                        </Form.Select>
-                      </Form.Group>
-                    </Col>
+                    {/* --- CONDITIONALLY RENDER PROFILE SELECTOR --- */}
+                    {!hideProfileSelector && (
+                      <Col xs={12}>
+                        <Form.Group>
+                          <Form.Label className="fw-bold text-dark text-sm">
+                            {t.experts.title} (Optionnel)
+                          </Form.Label>
+                          <Form.Select 
+                            name="profile" 
+                            value={formData.profile} 
+                            onChange={handleChange} 
+                            className="p-3 bg-light border-0 rounded-3"
+                          >
+                            <option value="">Sélectionnez un profil...</option>
+                            {t.experts.list.map((expert, index) => (
+                              <option key={index} value={expert}>{expert}</option>
+                            ))}
+                            <option value="Autre">Autre / Je ne sais pas encore</option>
+                          </Form.Select>
+                        </Form.Group>
+                      </Col>
+                    )}
 
-                    <Col xs={12}>
-                      <Form.Group>
-                        <Form.Label className="fw-bold text-dark text-sm">{t.contact.form.message}</Form.Label>
-                        <Form.Control as="textarea" rows={4} name="message" value={formData.message} onChange={handleChange} className="p-3 bg-light border-0 rounded-3" required />
-                      </Form.Group>
-                    </Col>
+                    {/* --- CONDITIONALLY RENDER MESSAGE FIELD --- */}
+                    {!hideMessageField && (
+                      <Col xs={12}>
+                        <Form.Group>
+                          <Form.Label className="fw-bold text-dark text-sm">{t.contact.form.message}</Form.Label>
+                          <Form.Control 
+                            as="textarea" 
+                            rows={4} 
+                            name="message" 
+                            value={formData.message} 
+                            onChange={handleChange} 
+                            className="p-3 bg-light border-0 rounded-3" 
+                            required 
+                          />
+                        </Form.Group>
+                      </Col>
+                    )}
                     
                     <Col xs={12}>
                       <Button type="submit" className="btn-primary-custom w-100 py-3 mt-2 d-flex align-items-center justify-content-center gap-2" disabled={status === 'submitting'}>
