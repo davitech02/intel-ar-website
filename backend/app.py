@@ -10,13 +10,10 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 
+# USE THE EXACT VALUES THAT JUST WORKED IN THE TEST SCRIPT
 SENDER_EMAIL = "intelwebsitebot@gmail.com" 
-
-
-SENDER_PASSWORD = "lqfk bcop xnlh yqew" 
-
-
-RECIPIENT_EMAIL = "infos@intel-ar.ca" 
+SENDER_PASSWORD = "lqfk bcop xnlh yqew" # Paste the working password here
+RECIPIENT_EMAIL = "infos@intel-ar.ca"
 
 
 @app.route('/api/contact', methods=['POST'])

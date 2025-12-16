@@ -1,6 +1,6 @@
-import React, { useState } from 'react'; // REMOVED useEffect
+import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
-// REMOVED motion import
+// import { motion } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
 import { CheckCircle, Loader2 } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
@@ -40,8 +40,10 @@ export default function ContactUs() {
     }
 
     try {
-      const API_BASE = import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000';
+      const API_BASE = "https://intel-ar-website-backend.onrender.com"; 
       
+      console.log("Attempting to connect to:", `${API_BASE}/api/contact`); // Debugging log
+
       const response = await fetch(`${API_BASE}/api/contact`, {
         method: 'POST',
         headers: {
@@ -60,8 +62,8 @@ export default function ContactUs() {
         setStatus('error');
       }
     } catch (error) {
-      console.error("Network Error:", error);
-      alert("Error connecting to the backend server. Please try again.");
+      console.error("Network Error Details:", error);
+      alert("Erreur de connexion. Vérifiez que le backend est en ligne.");
       setStatus('idle');
     }
   };
@@ -71,7 +73,6 @@ export default function ContactUs() {
       <Container>
         <Row className="justify-content-center">
           <Col lg={8} className="text-center mb-16">
-             {/* CHANGED motion.div TO div */}
              <div>
               <h2 className="display-6 fw-bold text-dark mb-3">
                 {t.contact.title}
@@ -132,19 +133,13 @@ export default function ContactUs() {
                       </Form.Group>
                     </Col>
 
-                    {/* --- CONDITIONALLY RENDER PROFILE SELECTOR --- */}
                     {!hideProfileSelector && (
                       <Col xs={12}>
                         <Form.Group>
                           <Form.Label className="fw-bold text-dark text-sm">
                             {t.experts.title} (Optionnel)
                           </Form.Label>
-                          <Form.Select 
-                            name="profile" 
-                            value={formData.profile} 
-                            onChange={handleChange} 
-                            className="p-3 bg-light border-0 rounded-3"
-                          >
+                          <Form.Select name="profile" value={formData.profile} onChange={handleChange} className="p-3 bg-light border-0 rounded-3">
                             <option value="">Sélectionnez un profil...</option>
                             {t.experts.list.map((expert, index) => (
                               <option key={index} value={expert}>{expert}</option>
@@ -155,20 +150,11 @@ export default function ContactUs() {
                       </Col>
                     )}
 
-                    {/* --- CONDITIONALLY RENDER MESSAGE FIELD --- */}
                     {!hideMessageField && (
                       <Col xs={12}>
                         <Form.Group>
                           <Form.Label className="fw-bold text-dark text-sm">{t.contact.form.message}</Form.Label>
-                          <Form.Control 
-                            as="textarea" 
-                            rows={4} 
-                            name="message" 
-                            value={formData.message} 
-                            onChange={handleChange} 
-                            className="p-3 bg-light border-0 rounded-3" 
-                            required 
-                          />
+                          <Form.Control as="textarea" rows={4} name="message" value={formData.message} onChange={handleChange} className="p-3 bg-light border-0 rounded-3" required />
                         </Form.Group>
                       </Col>
                     )}
