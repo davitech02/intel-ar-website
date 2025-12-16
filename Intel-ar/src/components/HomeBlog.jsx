@@ -8,10 +8,7 @@ import { ArrowRight, Calendar } from 'lucide-react';
 
 export default function HomeBlog() {
   const { t } = useLanguage();
-
-  // Safely get posts, default to empty array if undefined
   const posts = t.blog?.posts || [];
-  // Show only the first 2 posts on Home
   const homePosts = posts.slice(0, 2);
 
   return (
@@ -44,15 +41,17 @@ export default function HomeBlog() {
               >
                 <div className="h-100 border border-light rounded-card overflow-hidden shadow-card hover:shadow-lg transition bg-white group">
                   
-                  {/* Image */}
+                  {/* Image Container */}
                   <div className="overflow-hidden position-relative" style={{ height: '250px' }}>
                     <img 
                       src={post.image} 
                       alt={post.title} 
-                      className="w-100 h-100 object-cover transition duration-500 group-hover:scale-105"
+                      className="w-100 h-100 transition duration-500 group-hover:scale-105"
+                      // --- FIX IS HERE: objectFit stops stretching ---
+                      style={{ objectFit: 'cover' }} 
                       onError={(e) => { 
-                        e.target.style.display = 'none'; // Hide broken image
-                        e.target.parentNode.style.backgroundColor = '#e2e8f0'; // Grey fallback
+                        e.target.style.display = 'none'; 
+                        e.target.parentNode.style.backgroundColor = '#e2e8f0'; 
                       }}
                     />
                   </div>
@@ -72,7 +71,6 @@ export default function HomeBlog() {
                       {post.excerpt}
                     </p>
 
-                    {/* Link to Main Blog Page */}
                     <Link to={`/blog/${post.id}`} className="text-primary fw-bold text-decoration-none d-inline-flex align-items-center gap-2 align-self-start hover:translate-x-1 transition">
                       {t.blog.readMore} <ArrowRight size={18} />
                     </Link>

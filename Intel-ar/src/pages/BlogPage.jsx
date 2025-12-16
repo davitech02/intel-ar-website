@@ -1,7 +1,6 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useLanguage } from '../context/LanguageContext';
-// --- FIX IS HERE: IMPORT LINK ---
 import { Link } from 'react-router-dom'; 
 import { Calendar } from 'lucide-react';
 
@@ -19,21 +18,21 @@ export default function BlogPage() {
         <Row className="g-5">
           {t.blog.posts.map((post) => (
             <Col md={6} lg={4} key={post.id}>
-              {/* WRAP CARD IN LINK SO IT IS CLICKABLE */}
               <Link to={`/blog/${post.id}`} className="text-decoration-none">
                 <div className="h-100 border border-light rounded-card overflow-hidden shadow-card bg-white hover:shadow-lg transition group">
                   
-                  {/* Image */}
+                  {/* Image Container */}
                   <div className="overflow-hidden position-relative" style={{ height: '220px' }}>
                     <img 
                       src={post.image} 
                       alt={post.title} 
-                      className="w-100 h-100 object-cover transition duration-500 group-hover:scale-105"
+                      className="w-100 h-100 transition duration-500 group-hover:scale-105"
+                      // --- FIX IS HERE ---
+                      style={{ objectFit: 'cover' }}
                       onError={(e) => { e.target.style.backgroundColor = '#e2e8f0'; }}
                     />
                   </div>
 
-                  {/* Content */}
                   <div className="p-4">
                     <div className="d-flex align-items-center gap-2 text-secondary text-sm mb-3">
                       <Calendar size={16} className="text-primary" />

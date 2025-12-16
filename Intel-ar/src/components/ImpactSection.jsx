@@ -1,6 +1,6 @@
-/* eslint-disable no-unused-vars */
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
 import { CheckCircle2 } from 'lucide-react';
@@ -9,10 +9,12 @@ export default function ImpactSection() {
   const { t } = useLanguage();
 
   return (
-    // FIX 1: Increased padding from py-32 to py-40
     <section className="py-40 bg-primary position-relative overflow-hidden">
-      {/* Decorative Circles */}
-      <div className="position-absolute top-0 start-0 bg-white opacity-10 rounded-circle" style={{ width: '400px', height: '400px', transform: 'translate(-50%, -50%)' }}></div>
+      
+      {/* --- FIX: REMOVED THE TOP LEFT WHITE CIRCLE DIV HERE --- */}
+      
+      {/* Bottom Circle (Optional - kept it as it's usually not intrusive, but tell me if you want it gone too) */}
+      <div className="position-absolute bottom-0 end-0 bg-white opacity-10 rounded-circle" style={{ width: '300px', height: '300px', transform: 'translate(30%, 30%)' }}></div>
       
       <Container className="position-relative z-10">
         <Row className="justify-content-center text-center mb-5">
@@ -21,7 +23,7 @@ export default function ImpactSection() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-white fw-bold display-6 mb-1"
+              className="text-white fw-bold display-6 mb-3"
             >
               {t.impact.title}
             </motion.h2>
@@ -36,7 +38,6 @@ export default function ImpactSection() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              // Keeping rounded-pill as requested previously
               className="bg-white/10 backdrop-blur-md border border-white/20 rounded-pill px-5 py-3 text-white d-flex align-items-center gap-3 shadow-lg hover:bg-white/20 transition cursor-default"
               style={{ minWidth: '240px' }}
             >
