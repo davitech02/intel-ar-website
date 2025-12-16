@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container, Row, Col, Accordion } from 'react-bootstrap';
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
 import { HelpCircle } from 'lucide-react';

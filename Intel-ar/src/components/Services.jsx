@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
 import { BrainCircuit, BarChart3, Settings2, Briefcase } from 'lucide-react';
