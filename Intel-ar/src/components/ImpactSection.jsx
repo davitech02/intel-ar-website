@@ -11,10 +11,7 @@ export default function ImpactSection() {
   return (
     <section className="py-40 bg-primary position-relative overflow-hidden">
       
-      {/* --- FIX: REMOVED THE TOP LEFT WHITE CIRCLE DIV HERE --- */}
-      
-      {/* Bottom Circle (Optional - kept it as it's usually not intrusive, but tell me if you want it gone too) */}
-      <div className="position-absolute bottom-0 end-0 bg-white opacity-10 rounded-circle" style={{ width: '300px', height: '300px', transform: 'translate(30%, 30%)' }}></div>
+      {/* --- ALL CIRCLES REMOVED FOR CLEAN LOOK --- */}
       
       <Container className="position-relative z-10">
         <Row className="justify-content-center text-center mb-5">
