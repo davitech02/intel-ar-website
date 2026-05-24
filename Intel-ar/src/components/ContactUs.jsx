@@ -40,10 +40,8 @@ export default function ContactUs() {
     }
 
     try {
-      const API_BASE = "https://intel-ar-website-backend.onrender.com"; 
-      
-      console.log("Attempting to connect to:", `${API_BASE}/api/contact`); // Debugging log
-
+      // Use VITE_API_URL if set, else fallback to localhost
+      const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
       const response = await fetch(`${API_BASE}/api/contact`, {
         method: 'POST',
         headers: {
@@ -54,17 +52,16 @@ export default function ContactUs() {
 
       const result = await response.json();
 
-      if (response.ok) {
+      if (response.ok && result.success) {
         setStatus('success');
         setFormData({ company: '', name: '', email: '', phone: '', profile: '', message: '' });
       } else {
-        console.error("Server Error:", result);
         setStatus('error');
+        alert(result.error || "Erreur lors de l'envoi du message.");
       }
-    } catch (error) {
-      console.error("Network Error Details:", error);
+    } catch {
+      setStatus('error');
       alert("Erreur de connexion. Vérifiez que le backend est en ligne.");
-      setStatus('idle');
     }
   };
 
