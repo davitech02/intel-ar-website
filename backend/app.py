@@ -20,7 +20,9 @@ CORS(app,
              "http://localhost:5173",
              "http://localhost:3000",
              "https://intel-ar-website.vercel.app",
-             "https://www.intel-ar-website.vercel.app"
+             "https://www.intel-ar-website.vercel.app",
+             "https://www.intel-ar.ca",
+             "https://intel-ar.ca"
          ],
          "methods": ["GET", "POST", "OPTIONS"],
          "allow_headers": ["Content-Type"]

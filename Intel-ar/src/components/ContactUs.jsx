@@ -46,8 +46,8 @@ export default function ContactUs() {
       if (typeof window !== 'undefined') {
         const hostname = window.location.hostname;
         
-        // Production domain (Vercel)
-        if (hostname.includes('vercel.app')) {
+        // Production domain (intel-ar.ca or Vercel)
+        if (hostname.includes('intel-ar.ca') || hostname.includes('vercel.app')) {
           API_BASE = "https://intel-ar-website-backend.onrender.com";
         }
         // Local development
