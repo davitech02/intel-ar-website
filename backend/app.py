@@ -14,22 +14,41 @@ except ImportError:
     pass
 
 app = Flask(__name__)
-CORS(app, 
-     resources={r"/*": {
-         "origins": [
-             "http://localhost:5173",
-             "http://localhost:3000",
-             "https://intel-ar-website.vercel.app",
-             "https://www.intel-ar-website.vercel.app",
-             "https://www.intel-ar.ca",
-             "https://intel-ar.ca",
-             "https://intel-ar-website-bac-r.com",
-             "https://www.intel-ar-website-bac-r.com"
-         ],
-         "methods": ["GET", "POST", "OPTIONS"],
-         "allow_headers": ["Content-Type"]
-     }
-})
+
+# ============================================================================
+# PROFESSIONAL CORS CONFIGURATION FOR PRODUCTION
+# ============================================================================
+# Production: Allow ONLY the Vercel frontend
+# Development: Allow localhost for testing
+# ============================================================================
+
+ALLOWED_ORIGINS = [
+    # Production
+    "https://intel-ar-website.vercel.app",
+    "https://www.intel-ar-website.vercel.app",
+    # Development (local testing)
+    "http://localhost:5173",
+    "http://localhost:3000",
+    "http://127.0.0.1:5173",
+    "http://127.0.0.1:3000"
+]
+
+CORS(app,
+     resources={
+         r"/api/*": {
+             "origins": ALLOWED_ORIGINS,
+             "methods": ["GET", "POST", "OPTIONS"],
+             "allow_headers": ["Content-Type", "Authorization"],
+             "expose_headers": ["Content-Type"],
+             "supports_credentials": False,
+             "max_age": 3600
+         }
+     },
+     # Additional CORS settings for Render/production
+     send_wildcard=False,
+     automatic_options=True,
+     vary_header=True
+)
 
 # Environment variables
 SENDER_EMAIL = os.getenv("MAIL_USERNAME")
@@ -65,8 +84,27 @@ def is_spam(data):
         return True
     return False
 
-@app.route('/api/contact', methods=['POST'])
+@app.route('/api/health', methods=['GET'])
+def health_check():
+    """Health check endpoint for Render deployment."""
+    return jsonify({"status": "ok"}), 200
+
+
+@app.route('/api/contact', methods=['POST', 'OPTIONS'])
 def contact():
+    """Handle contact form submissions with email sending."""
+    # Handle preflight request
+    if request.method == 'OPTIONS':
+        return '', 204
+    
+    # Only process POST requests
+    if request.method != 'POST':
+        return jsonify({'success': False, 'error': 'Method not allowed'}), 405
+    
+    # Validate Content-Type
+    if not request.is_json:
+        return jsonify({'success': False, 'error': 'Content-Type must be application/json'}), 400
+    
     ip = request.remote_addr
     if is_rate_limited(ip):
         return jsonify({'success': False, 'error': 'Too many requests. Please try again later.'}), 429
@@ -117,11 +155,15 @@ Pour répondre à ce client, cliquez simplement sur \"Répondre\".
         server.quit()
 
         print(f"Email sent successfully from {user_name}")
-        return jsonify({"success": True}), 200
+        return jsonify({"success": True, "message": "Email sent successfully"}), 200
 
     except Exception as e:
         print("Error sending email:", e)
         return jsonify({"success": False, "error": str(e)}), 500
 
 if __name__ == '__main__':
+    # For development only
     app.run(debug=True, port=5000)
+    
+    # For production on Render, use gunicorn instead:
+    # gunicorn -w 4 -b 0.0.0.0:5000 app:app

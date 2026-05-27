@@ -40,26 +40,8 @@ export default function ContactUs() {
     }
 
     try {
-      // Determine API URL based on environment
-      let API_BASE;
-      
-      if (typeof window !== 'undefined') {
-        const hostname = window.location.hostname;
-        
-        // Production domain (intel-ar.ca or Vercel)
-        if (hostname.includes('intel-ar.ca') || hostname.includes('vercel.app')) {
-          API_BASE = "https://intel-ar-website-backend.onrender.com";
-        }
-        // Local development
-        else if (hostname === 'localhost' || hostname === '127.0.0.1') {
-          API_BASE = "http://localhost:5000";
-        }
-        // Fallback to environment variable or localhost
-        else {
-          API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
-        }
-      }
-      
+      // Production: Use Render backend
+      const API_BASE = "https://intel-ar-website-backend.onrender.com";
       const response = await fetch(`${API_BASE}/api/contact`, {
         method: 'POST',
         headers: {
