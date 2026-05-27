@@ -169,6 +169,8 @@ Pour répondre à ce client, cliquez simplement sur \"Répondre\".
 """
 
     try:
+        print("STEP 1: Creating message...")
+
         msg = MIMEMultipart()
         msg['From'] = f"Intel-Ar Website <{SENDER_EMAIL}>"
         msg['To'] = RECIPIENT_EMAIL
@@ -176,27 +178,51 @@ Pour répondre à ce client, cliquez simplement sur \"Répondre\".
         msg.add_header('Reply-To', user_email)
         msg.attach(MIMEText(body, 'plain'))
 
+        print("STEP 2: Connecting to SMTP server...")
+
         if USE_SSL:
             server = smtplib.SMTP_SSL(
                 SMTP_SERVER,
                 SMTP_PORT,
-                timeout=20
+                timeout=10
             )
         else:
             server = smtplib.SMTP(
                 SMTP_SERVER,
                 SMTP_PORT,
-                timeout=20
+                timeout=10
             )
             server.starttls()
-            server.login(SENDER_EMAIL, SENDER_PASSWORD)
 
-        print(f"Email sent successfully from {user_name}")
-        return jsonify({"success": True, "message": "Email sent successfully"}), 200
+        print("STEP 3: Connected successfully")
+
+        server.ehlo()
+
+        print("STEP 4: Logging in...")
+
+        server.login(SENDER_EMAIL, SENDER_PASSWORD)
+
+        print("STEP 5: Login successful")
+
+        server.send_message(msg)
+
+        print("STEP 6: Email sent")
+
+        server.quit()
+
+        return jsonify({
+            "success": True,
+            "message": "Email sent successfully"
+        }), 200
 
     except Exception as e:
-        print("Error sending email:", e)
-        return jsonify({"success": False, "error": str(e)}), 500
+        print("FULL EMAIL ERROR:")
+        print(str(e))
+
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 500
 
 if __name__ == '__main__':
     # For development only
