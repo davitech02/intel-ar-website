@@ -6,7 +6,8 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from flask_mail import Mail
+
+
 
 try:
     from dotenv import load_dotenv
@@ -28,7 +29,7 @@ app.config['MAIL_PASSWORD'] = os.getenv("MAIL_PASSWORD")
 app.config['MAIL_DEFAULT_SENDER'] = os.getenv("MAIL_USERNAME")
 app.config['MAIL_TIMEOUT'] = 20
 
-mail = Mail(app)
+
 # ============================================================================
 # PROFESSIONAL CORS CONFIGURATION FOR PRODUCTION
 # ============================================================================
@@ -81,6 +82,8 @@ CORS(
 # Environment variables
 SENDER_EMAIL = os.getenv("MAIL_USERNAME")
 SENDER_PASSWORD = os.getenv("MAIL_PASSWORD")
+if not SENDER_EMAIL or not SENDER_PASSWORD:
+    raise ValueError("MAIL_USERNAME or MAIL_PASSWORD is missing")
 RECIPIENT_EMAIL = os.getenv("MAIL_RECIPIENT", SENDER_EMAIL)
 SMTP_SERVER = os.getenv("MAIL_SERVER", "mail.intel-ar.ca")
 SMTP_PORT = int(os.getenv("MAIL_PORT", 465))
@@ -174,13 +177,19 @@ Pour répondre à ce client, cliquez simplement sur \"Répondre\".
         msg.attach(MIMEText(body, 'plain'))
 
         if USE_SSL:
-            server = smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT)
+            server = smtplib.SMTP_SSL(
+                SMTP_SERVER,
+                SMTP_PORT,
+                timeout=20
+            )
         else:
-            server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+            server = smtplib.SMTP(
+                SMTP_SERVER,
+                SMTP_PORT,
+                timeout=20
+            )
             server.starttls()
-        server.login(SENDER_EMAIL, SENDER_PASSWORD)
-        server.send_message(msg)
-        server.quit()
+            server.login(SENDER_EMAIL, SENDER_PASSWORD)
 
         print(f"Email sent successfully from {user_name}")
         return jsonify({"success": True, "message": "Email sent successfully"}), 200
