@@ -6,6 +6,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from flask_mail import Mail
 
 try:
     from dotenv import load_dotenv
@@ -15,6 +16,19 @@ except ImportError:
 
 app = Flask(__name__)
 
+# EMAIL CONFIG
+app.config['MAIL_SERVER'] = 'mail.intel-ar.ca'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+
+app.config['MAIL_USERNAME'] = os.getenv("MAIL_USERNAME")
+app.config['MAIL_PASSWORD'] = os.getenv("MAIL_PASSWORD")
+
+app.config['MAIL_DEFAULT_SENDER'] = os.getenv("MAIL_USERNAME")
+app.config['MAIL_TIMEOUT'] = 20
+
+mail = Mail(app)
 # ============================================================================
 # PROFESSIONAL CORS CONFIGURATION FOR PRODUCTION
 # ============================================================================
