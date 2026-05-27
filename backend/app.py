@@ -14,7 +14,18 @@ except ImportError:
     pass
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app, 
+     resources={r"/*": {
+         "origins": [
+             "http://localhost:5173",
+             "http://localhost:3000",
+             "https://intel-ar-website.vercel.app",
+             "https://www.intel-ar-website.vercel.app"
+         ],
+         "methods": ["GET", "POST", "OPTIONS"],
+         "allow_headers": ["Content-Type"]
+     }
+})
 
 # Environment variables
 SENDER_EMAIL = os.getenv("MAIL_USERNAME")
