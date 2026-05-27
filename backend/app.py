@@ -22,7 +22,9 @@ CORS(app,
              "https://intel-ar-website.vercel.app",
              "https://www.intel-ar-website.vercel.app",
              "https://www.intel-ar.ca",
-             "https://intel-ar.ca"
+             "https://intel-ar.ca",
+             "https://intel-ar-website-bac-r.com",
+             "https://www.intel-ar-website-bac-r.com"
          ],
          "methods": ["GET", "POST", "OPTIONS"],
          "allow_headers": ["Content-Type"]
