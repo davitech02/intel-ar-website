@@ -27,6 +27,13 @@ ALLOWED_ORIGINS = [
     "https://intel-ar-website.vercel.app",
     "https://www.intel-ar-website.vercel.app",
     # Development (local testing on common ports)
+
+     # Main custom domain
+    "https://intel-ar.ca",
+
+    # WWW version
+    "https://www.intel-ar.ca",
+
     "http://localhost:5173",
     "http://localhost:3000",
     "http://localhost:5000",
@@ -37,21 +44,24 @@ ALLOWED_ORIGINS = [
     "http://127.0.0.1:8000"
 ]
 
-CORS(app,
-     resources={
-         r"/api/*": {
-             "origins": ALLOWED_ORIGINS,
-             "methods": ["GET", "POST", "OPTIONS"],
-             "allow_headers": ["Content-Type", "Authorization"],
-             "expose_headers": ["Content-Type"],
-             "supports_credentials": False,
-             "max_age": 3600
-         }
-     },
-     # Additional CORS settings for Render/production
-     send_wildcard=False,
-     automatic_options=True,
-     vary_header=True
+CORS(
+    app,
+    resources={
+        r"/api/*": {
+            "origins": ALLOWED_ORIGINS,
+            "methods": ["GET", "POST", "OPTIONS"],
+            "allow_headers": [
+                "Content-Type",
+                "Authorization"
+            ],
+            "expose_headers": ["Content-Type"],
+            "supports_credentials": False,
+            "max_age": 3600
+        }
+    },
+    send_wildcard=False,
+    automatic_options=True,
+    vary_header=True
 )
 
 # Environment variables
