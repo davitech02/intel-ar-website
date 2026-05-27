@@ -40,8 +40,26 @@ export default function ContactUs() {
     }
 
     try {
-      // Production: Use Render backend
-      const API_BASE = "https://intel-ar-website-backend.onrender.com";
+      // Determine API URL based on environment
+      let API_BASE;
+      
+      if (typeof window !== 'undefined') {
+        const hostname = window.location.hostname;
+        
+        // Local development
+        if (hostname === 'localhost' || hostname === '127.0.0.1') {
+          API_BASE = "http://localhost:5000";
+        }
+        // Production (Vercel)
+        else if (hostname.includes('vercel.app')) {
+          API_BASE = "https://intel-ar-website-backend.onrender.com";
+        }
+        // Fallback
+        else {
+          API_BASE = "https://intel-ar-website-backend.onrender.com";
+        }
+      }
+      
       const response = await fetch(`${API_BASE}/api/contact`, {
         method: 'POST',
         headers: {
