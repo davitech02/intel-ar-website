@@ -40,8 +40,26 @@ export default function ContactUs() {
     }
 
     try {
-      // Use VITE_API_URL if set, else fallback to localhost
-      const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
+      // Determine API URL based on environment
+      let API_BASE;
+      
+      if (typeof window !== 'undefined') {
+        const hostname = window.location.hostname;
+        
+        // Production domain (Vercel)
+        if (hostname.includes('vercel.app')) {
+          API_BASE = "https://intel-ar-website-backend.onrender.com";
+        }
+        // Local development
+        else if (hostname === 'localhost' || hostname === '127.0.0.1') {
+          API_BASE = "http://localhost:5000";
+        }
+        // Fallback to environment variable or localhost
+        else {
+          API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
+        }
+      }
+      
       const response = await fetch(`${API_BASE}/api/contact`, {
         method: 'POST',
         headers: {
